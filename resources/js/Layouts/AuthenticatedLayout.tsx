@@ -3,12 +3,19 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
+import { Col, Row } from 'antd';
 import { PropsWithChildren, ReactNode, useState } from 'react';
+
+type Props = {
+    header?: ReactNode;
+    actions?: ReactNode;
+};
 
 export default function Authenticated({
     header,
+    actions,
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+}: PropsWithChildren<Props>) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -32,6 +39,12 @@ export default function Authenticated({
                                     active={route().current('dashboard')}
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    href={route('links.index')}
+                                    active={route().current('links.index')}
+                                >
+                                    Links
                                 </NavLink>
                             </div>
                         </div>
@@ -137,6 +150,12 @@ export default function Authenticated({
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('links.index')}
+                            active={route().current('links.index')}
+                        >
+                            Links
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
@@ -168,7 +187,16 @@ export default function Authenticated({
             {header && (
                 <header className="bg-white shadow dark:bg-gray-800">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
+                        <Row>
+                            <Col flex="auto">
+                                {header}
+                            </Col>
+                            {actions ? (
+                                <Col className="text-right">
+                                    {actions}
+                                </Col>
+                            ) : null}
+                        </Row>
                     </div>
                 </header>
             )}
