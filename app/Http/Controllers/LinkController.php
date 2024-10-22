@@ -10,6 +10,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Link;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class LinkController extends Controller
 {
@@ -18,8 +20,7 @@ class LinkController extends Controller
      */
     public function index(): Response
     {
-        $links = Link::paginate(10);
-
+        $links = Link::where('user_id', Auth::id())->get();
         return Inertia::render('Link/Index', [
             'links' => $links,
         ]);
@@ -42,10 +43,10 @@ class LinkController extends Controller
     }
 
 
-    public function link(string $slug) : RedirectResponse {
+    public function link(string $slug) : RedirectResponse | Response {
         $link = Link::where('slug', $slug)->first();
-        if($link == null) {
-            abort(404);
+        if($link == null || $link->status !== 'Published') {
+            return Inertia::render('Errors/404');
         }
         return Redirect::to($link->destination);
     }
@@ -56,7 +57,16 @@ class LinkController extends Controller
     public function store(StoreLinkRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        Link::create($request->all());
+        $isPublish = $request->status === 'Published';
+        $now = Carbon::now()->toDateTimeString();
+        $link = Link::create([
+            'destination' => $request->destination,
+            'slug' => $request->slug,
+            'title' => $request->title,
+            'status' => $request->status,
+            'published_at' => $isPublish ? $now : null,
+            'user_id' => Auth::user()->id,
+        ]);
         return Redirect::route('links.index');
     }
 
@@ -64,7 +74,7 @@ class LinkController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Link $link): Response {
-        return Inertia::render('Link/Edit', ['$link' => $link]);
+        return Inertia::render('Link/Edit', ['link' => $link]);
     }
 
     /**
@@ -73,8 +83,16 @@ class LinkController extends Controller
     public function update(UpdateLinkRequest $request, Link $link): RedirectResponse
     {
         $validated = $request->validated();
-        $link->update($request->all());
-        return Redirect::route('links.show', $link->id);
+        $isPublish = $request->status === 'Published';
+        $now = Carbon::now()->toDateTimeString();
+        $link->update([
+            'destination' => $request->destination,
+            'slug' => $request->slug,
+            'title' => $request->title,
+            'status' => $request->status,
+            'published_at' => $isPublish ? $now : null,
+        ]);
+        return Redirect::route('links.index');
     }
 
     /**

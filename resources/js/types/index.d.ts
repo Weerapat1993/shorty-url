@@ -15,6 +15,18 @@ export type Banner = {
     updated_at: string
 }
 
+export type LinkType = {
+    id: number
+    destination: string
+    title: string
+    slug: string
+    user_id: number
+    status: 'Draft' | 'Published'
+    published_at: string
+    created_at: string
+    updated_at: string
+}
+
 type TargetLinkKeys = {
     [key: string]: string
 }

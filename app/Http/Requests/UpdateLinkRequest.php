@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Link;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class UpdateLinkRequest extends FormRequest
 {
@@ -19,12 +21,13 @@ class UpdateLinkRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(Request $request): array
     {
+        $id = Link::whereSlug($request->get('slug'))->first()->id;
         return [
             'destination' => 'required',
             'title' => 'required|max:255',
-            'slug' => 'required|max:255|unique:links',
+            'slug' => 'required|max:255|unique:links,slug,' . $id,
             'status' => 'required|max:255',
             'published_at' => 'nullable|date',
             'user_id' => 'required',

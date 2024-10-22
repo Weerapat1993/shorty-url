@@ -1,9 +1,15 @@
 import ShortyLinkItem from '@/Components/Link/ShortyLinkItem';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { LinkType } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Button } from 'antd';
 
-export default function ShortyLinks() {
+type Props = {
+    links: LinkType[]
+}
+
+export default function ShortyLinks(props: Props) {
+    const { links } = props
     return (
         <AuthenticatedLayout
             header={
@@ -21,8 +27,9 @@ export default function ShortyLinks() {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <ShortyLinkItem />
-                    <ShortyLinkItem />
+                    {(links || []).map(item => (
+                        <ShortyLinkItem key={item.id} link={item} />
+                    ))}
                 </div>
             </div>
 

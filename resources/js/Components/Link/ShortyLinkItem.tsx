@@ -1,31 +1,76 @@
+import { LinkType } from '@/types';
 import { asset } from '@/Utils/laravelBlade';
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Link } from '@inertiajs/react';
-import { Card, Typography, Button, Row, Col, Space } from 'antd';
+import { LinkOutlined, EditOutlined } from '@ant-design/icons';
+import { Card, Typography, Row, Col, Space, Button, Descriptions, Tag } from 'antd';
+import type { DescriptionsProps } from 'antd'
+import CopyTextButton from './CopyTextButton';
+import DeleteLinkButton from './DeleteLinkButton';
+import { Link, useForm } from '@inertiajs/react';
 
 const { Title, Paragraph } = Typography
 
-const ShortyLinkItem = () => {
+type Props = {
+    link: LinkType,
+}
+
+const ShortyLinkItem: React.FC<Props> = ({ link }) => {
+    const { delete: deleteMethod } = useForm()
+    const shortenLink = asset(`l/${link.slug}`)
+    const fullLink = link.destination;
+
+    const handleDelete = () => {
+        deleteMethod(route('links.destroy', link.id))
+    }
+    const isPublish = link.status === 'Published'
+
+    const publishDateItems = isPublish ? [
+        {
+            key: '2',
+            label: 'Published Date',
+            children: link.published_at,
+        },
+    ] : []
+    const items: DescriptionsProps['items'] = [
+        {
+            key: '1',
+            label: 'Status',
+            children: <Tag color={isPublish ? 'success' : 'warning'}>{link.status}</Tag>,
+        },
+        ...publishDateItems,
+    ]
     return (
         <Card className='mb-8'>
-            <Row>
-                <Col flex="auto">
-                    <Title level={4}>Title</Title>
-                </Col>
+            <Row className='flex-row-reverse'>
                 <Col className='text-right' flex="180px">
                     <Space size={[8, 8]} wrap>
-                        <Button type='dashed' icon={<CopyOutlined />}>Copy</Button>
-                        <Button type='primary' icon={<EditOutlined />} />
-                        <Button type='primary' danger icon={<DeleteOutlined />} />
+                        <CopyTextButton text={shortenLink} />
+                        <Link href={route('links.edit', link.id)}>
+                            <Button type='primary' icon={<EditOutlined />} />
+                        </Link>
+                        <form>
+                            <DeleteLinkButton onOk={handleDelete} />
+                        </form>
                     </Space>
                 </Col>
+                <Col flex="auto">
+                    <Title level={4}>{link.title}</Title>
+                </Col>
             </Row>
-            <Paragraph>
-                <Link className='font-bold text-blue-600' href={asset('l/test')} target='_blank' rel="noopener noreferrer">{asset('l/test')}</Link>
+            <Paragraph className='font-bold text-blue-600'>
+                <Space size={[8, 8]} wrap>
+                    <a href={shortenLink} target='_blank' rel="noopener noreferrer">{shortenLink}</a>
+                    <a href={shortenLink} target='_blank' rel="noopener noreferrer"><LinkOutlined /></a>
+                </Space>
             </Paragraph>
-            <Paragraph>
-                <Link href={asset('l/test')} target='_blank' rel="noopener noreferrer">{asset('l/test')}</Link>
+            <Paragraph className='text-white'>
+                <a href={fullLink} target='_blank' rel="noopener noreferrer">{fullLink}</a>
             </Paragraph>
+            <Row>
+                <Col md={12} xs={24}>
+                    <Descriptions column={2} items={items} />
+                </Col>
+                <Col md={12} xs={24}></Col>
+            </Row>
         </Card>
     )
 }

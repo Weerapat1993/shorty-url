@@ -6,7 +6,7 @@ import { store } from "@/Redux/store";
 import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs';
 import type Entity from '@ant-design/cssinjs/es/Cache';
 import { ConfigProvider, App } from 'antd';
-import { defaultTheme } from '@ant-design/compatible';
+import { darkTheme } from '@ant-design/compatible';
 
 type Props = {
     children?: React.ReactNode;
@@ -35,16 +35,16 @@ const defaultData: ThemeData = {
 export const Provider = ({ children }: Props) => (
     <ReduxProvider store={store}>
         <ConfigProvider theme={{
-            ...defaultTheme,
+            ...darkTheme,
             token: {
-                ...defaultTheme.token,
+                ...darkTheme.token,
                 colorPrimary: defaultData.colorPrimary,
                 borderRadius: defaultData.borderRadius,
             },
             components: {
-                ...defaultTheme.components,
+                ...darkTheme.components,
                 Button: {
-                    ...defaultTheme.components?.Button,
+                    ...darkTheme.components?.Button,
                     colorPrimary: defaultData.Button?.colorPrimary,
                     algorithm: defaultData.Button?.algorithm,
                 },
