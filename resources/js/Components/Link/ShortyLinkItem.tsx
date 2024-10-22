@@ -65,12 +65,17 @@ const ShortyLinkItem: React.FC<Props> = ({ link }) => {
             <Paragraph className='text-white'>
                 <a href={fullLink} target='_blank' rel="noopener noreferrer">{fullLink}</a>
             </Paragraph>
-            <Row>
-                <Col md={12} xs={24}>
-                    <Descriptions column={2} items={items} />
-                </Col>
-                <Col md={12} xs={24}></Col>
-            </Row>
+            <div className='hidden sm:block'>
+                <Row>
+                    <Col md={12} xs={24}>
+                        <Descriptions column={2} items={items} />
+                    </Col>
+                    <Col md={12} xs={24}></Col>
+                </Row>
+            </div>
+            <div className='sm:hidden block'>
+                <Descriptions column={1} items={items} />
+            </div>
         </Card>
     )
 }
