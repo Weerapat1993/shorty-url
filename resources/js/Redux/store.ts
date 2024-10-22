@@ -1,11 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import bannerReducer from '@/Redux/Features/bannerSlice';
 
 export const store = configureStore({
-  reducer: {
-    bannerReducer,
-  },
+  reducer: {},
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({}).concat([]),
