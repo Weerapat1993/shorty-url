@@ -4,6 +4,12 @@
 
 Project Shorten URL create with Laravel 11
 
+## Features
+
+- [x] **User Account Module:** Allows users to register and log in with their email or username and password.
+- [x] **URL Shortage Module:** Allows users to input the URL to be shortened and keep the output with the shortened link to share with the public.
+- [x] **Admin Module:** Allows administrators to see and administrate the links that the users shorten.
+
 ## Installation
 
 ```sh
@@ -19,6 +25,12 @@ npm run build
 php artisan serve
 ```
 
+## Result
+
+![Result](./result.png)
+
 ## ER Diagrams
 
 ![ER Diagram](./er_diagram.png)
+
+Excel Database : [Link here](https://docs.google.com/spreadsheets/d/1C2gh892o0tT8NhEIU0y_HcyoCIRZZsdgJX10Arb7xPc/edit?usp=sharing)
