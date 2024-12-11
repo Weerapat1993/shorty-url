@@ -9,7 +9,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Ledger;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 
@@ -78,5 +78,32 @@ class LedgerController extends Controller
     {
         $ledger->delete();
         return Redirect::route('ledgers.index');
+    }
+
+    public function dashboard()
+    {
+        $ageDistribution = Ledger::select(DB::raw('
+            CASE
+                WHEN TIMESTAMPDIFF(YEAR, STR_TO_DATE(birthdate, "%Y-%m-%d"), CURDATE()) < 18 THEN "Under 18"
+                WHEN TIMESTAMPDIFF(YEAR, STR_TO_DATE(birthdate, "%Y-%m-%d"), CURDATE()) BETWEEN 18 AND 24 THEN "18-24"
+                WHEN TIMESTAMPDIFF(YEAR, STR_TO_DATE(birthdate, "%Y-%m-%d"), CURDATE()) BETWEEN 25 AND 34 THEN "25-34"
+                WHEN TIMESTAMPDIFF(YEAR, STR_TO_DATE(birthdate, "%Y-%m-%d"), CURDATE()) BETWEEN 35 AND 44 THEN "35-44"
+                WHEN TIMESTAMPDIFF(YEAR, STR_TO_DATE(birthdate, "%Y-%m-%d"), CURDATE()) BETWEEN 45 AND 54 THEN "45-54"
+                ELSE "55+"
+            END AS age_group'
+        ))
+        ->whereRaw('STR_TO_DATE(birthdate, "%Y-%m-%d") IS NOT NULL')
+        ->groupBy('age_group')
+        ->selectRaw('COUNT(*) as count')
+        ->orderBy('age_group')
+        ->get()
+        ->map(function ($item) {
+            return [
+                'ageGroup' => $item->age_group,
+                'count' => $item->count,
+            ];
+        });
+        return Inertia::render('Dashboard', ['pie' => $ageDistribution]);
+        // return response()->json($ageDistribution);
     }
 }

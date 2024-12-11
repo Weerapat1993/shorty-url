@@ -2,16 +2,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { Pie } from '@ant-design/plots';
 
-export default function Dashboard() {
+export default function Dashboard({ pie }) {
+    console.log(pie);
     const config = {
-        data: [
-          { type: '分类一', value: 27 },
-          { type: '分类二', value: 25 },
-          { type: '分类三', value: 18 },
-          { type: '分类四', value: 15 },
-          { type: '分类五', value: 10 },
-          { type: '其他', value: 5 },
-        ],
+        data: pie.map(item => ({
+            type: item.ageGroup,
+            value: item.count,
+        })),
         angleField: 'value',
         colorField: 'type',
         label: {
@@ -37,7 +34,7 @@ export default function Dashboard() {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 bg-slate-300">
                     <Pie {...config} />
                 </div>
             </div>
