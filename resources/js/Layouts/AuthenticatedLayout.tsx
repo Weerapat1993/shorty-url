@@ -21,6 +21,24 @@ export default function Authenticated({
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    const navLinks = [
+        {
+            id: 1,
+            routeName: 'dashboard',
+            title: 'Dashboard'
+        },
+        {
+            id: 2,
+            routeName: 'ledgers.index',
+            title: 'บัญชีรายรับรายจ่าย',
+        },
+        {
+            id: 3,
+            routeName: 'links.index',
+            title: 'Links'
+        },
+    ]
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
@@ -34,18 +52,15 @@ export default function Authenticated({
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    href={route('links.index')}
-                                    active={route().current('links.index')}
-                                >
-                                    Links
-                                </NavLink>
+                                {navLinks.map((navLink) => (
+                                    <NavLink
+                                        key={navLink.id}
+                                        href={route(navLink.routeName)}
+                                        active={route().current(navLink.routeName)}
+                                    >
+                                        {navLink.title}
+                                    </NavLink>
+                                ))}
                             </div>
                         </div>
 
@@ -144,18 +159,15 @@ export default function Authenticated({
                     }
                 >
                     <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('links.index')}
-                            active={route().current('links.index')}
-                        >
-                            Links
-                        </ResponsiveNavLink>
+                        {navLinks.map(navLink => (
+                            <ResponsiveNavLink
+                                key={navLink.id}
+                                href={route(navLink.routeName)}
+                                active={route().current(navLink.routeName)}
+                            >
+                                {navLink.title}
+                            </ResponsiveNavLink>
+                        ))}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">

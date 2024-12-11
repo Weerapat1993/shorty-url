@@ -15,6 +15,19 @@ export type Banner = {
     updated_at: string
 }
 
+export type LedgerType = {
+    id: number
+    key?: number | string
+    title: string
+    firstname: string
+    lastname: string
+    name?: string
+    birthdate: string
+    avatar_url?: string
+    created_at: string
+    updated_at: string
+}
+
 export type LinkType = {
     id: number
     destination: string
