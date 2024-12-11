@@ -113,7 +113,7 @@ const LedgerForm: React.FC<Props> = (props) => {
                 />
                 <div>
                     <InputLabel htmlFor="birthdate" value="วันเดือนปีเกิด" />
-                    <DatePicker defaultValue={dayjs(data.birthdate, dateFormat)} size="large" onChange={onChangeDate} required />
+                    <DatePicker defaultValue={data.birthdate ? dayjs(data.birthdate, dateFormat) : undefined} size="large" onChange={onChangeDate} required />
                     <InputError className="mt-2" message={errors.birthdate} />
                 </div>
 

@@ -37,7 +37,7 @@ const LedgerTable: React.FC<Props> = ({ data }) => {
 
 	const dataMapping = (data || []).map(item => ({
 		key: item.id,
-		name: `${item.firstname} ${item.lastname}`,
+		name: `${item.title} ${item.firstname} ${item.lastname}`,
 		age: getAge(item.birthdate),
 		birthdate: item.birthdate,
 	}))
